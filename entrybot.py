@@ -110,7 +110,7 @@ with requests.Session() as s:
                             createComment(rpl)
 
                         elif commend=='프사':
-                            profileImage=bot.profileImage()
+                            profileImage=bot.profImgNick(bot.authorId)
                             createComment(f'{bot.authorNick}님의 프로필 사진이에요!', profileImage)
 
                         elif commend[:3]=='프사 ':
