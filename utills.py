@@ -73,29 +73,29 @@ class Bot:
 
     def bgImage(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
-        story=req.text
-        bgImage=story[story.index('"coverImage":{"id":"')+20:story.index('"coverImage":{"id":"')+20+24]
+        myPage=req.text
+        bgImage=myPage[myPage.index('"coverImage":{"id":"')+20:myPage.index('"coverImage":{"id":"')+20+24]
         return bgImage
 
     def profImgNick(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
-        story=req.text
-        profileImage=story[story.index('"profileImage":{"id":"')+22:story.index('"profileImage":{"id":"')+22+24]
+        myPage=req.text
+        profileImage=myPage[myPage.index('"profileImage":{"id":"')+22:myPage.index('"profileImage":{"id":"')+22+24]
         return profileImage
 
     def userSearchId(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.userSearchId, "variables":{"username":id}})
-        story=req.text
+        userSearch=req.text
         try:
-            myPage=story[story.index('"id":"')+6:story.index('"id":"')+6+24]
+            myPage=userSearch[userSearch.index('"id":"')+6:userSearch.index('"id":"')+6+24]
             return myPage
         except: return None
 
     def userSearchNick(self, nick):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.userSearchNick, "variables":{"nickname":nick}})
-        story=req.text
+        userSearch=req.text
         try:
-            myPage=story[story.index('"id":"')+6:story.index('"id":"')+6+24]
+            myPage=userSearch[userSearch.index('"id":"')+6:userSearch.index('"id":"')+6+24]
             return myPage
         except: return None
 
@@ -103,12 +103,12 @@ class Bot:
         like, comment, view=0, 0, 0 # 총합
         mostLike, mostComment, mostView=[0, 0], [0, 0], [0, 0] # [좋아요 수, id]
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
-        story=req.text
-        projectCnt=int(story[story.index(':{"project":')+12:story.index(',"projectAll":')])
-        status=story[story.index('"userStatus":"')+14:story.index(r'"}}},"ex')]
-        qna=int(story[story.index('"qna":')+6:story.index(',"tips":')])
-        tip=int(story[story.index(',"tips":')+8:story.index(',"free":')])
-        free=int(story[story.index(',"free":')+8:story.index('},"following":')])
+        myPage=req.text
+        projectCnt=int(myPage[myPage.index(':{"project":')+12:myPage.index(',"projectAll":')])
+        status=myPage[myPage.index('"userStatus":"')+14:myPage.index(r'"}}},"ex')]
+        qna=int(myPage[myPage.index('"qna":')+6:myPage.index(',"tips":')])
+        tip=int(myPage[myPage.index(',"tips":')+8:myPage.index(',"free":')])
+        free=int(myPage[myPage.index(',"free":')+8:myPage.index('},"following":')])
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
         popular=len(re.findall(r'"ranked":".+?"', req.text))
         staff=len(re.findall(r'"staffPicked":".+?"', req.text))
@@ -144,11 +144,11 @@ class Bot:
             req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.project, "variables":{"query":"","term":"week","listName":"projectList","searchType":"scroll","pageParam":{"sort":"likeCnt","display":100}}})
         else:
             req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.project, "variables":{"query":"","categoryCode":categoryList[category],"term":"week","listName":"projectList","searchType":"scroll","pageParam":{"sort":"likeCnt","display":100}}})
-        story=req.text
-        project=re.findall(r'[\[|},]{"id":".{24}?"', story)
-        name=re.findall(r'","name":".+?",', story)
-        nick=re.findall(r'","nickname":".+?",', story)
-        nick=re.findall(r'","nickname":".+?",', story)
+        projShare=req.text
+        project=re.findall(r'[\[|},]{"id":".{24}?"', projShare)
+        name=re.findall(r'","name":".+?",', projShare)
+        nick=re.findall(r'","nickname":".+?",', projShare)
+        nick=re.findall(r'","nickname":".+?",', projShare)
         num=0
         for i in project:
             project[num]=i[8:-1]
@@ -163,8 +163,8 @@ class Bot:
             num+=1
         num=random.randint(0, len(project)-1)
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.projectDetail, "variables":{"id":project[num]}})
-        story=req.text
-        des=story[story.index('"parent"'):]
+        projShare=req.text
+        des=projShare[projShare.index('"parent"'):]
         des=des[des.index('"description":')+14:des.index(',"description2"')]
         if des=='null':
             des=''
