@@ -1,5 +1,6 @@
 import requests, os, csv, time, traceback, datetime
 import graphql, utills
+from keep_alive import keep_alive
 
 pre_id=0
 active=True
@@ -35,6 +36,8 @@ with requests.Session() as s:
         a=csv.writer(f, delimiter=',')
         a.writerows([adminList])
         f.close()
+
+    keep_alive()
 
     while True:
         try:
