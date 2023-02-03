@@ -52,8 +52,18 @@ with requests.Session() as s:
                     try: createComment(utills.commendList[commend])
 
                     except:
+                        # 혼동되는 명령어 안내
+                        if commend[:5]=='세부정보 ':
+                            createComment("이전의 'ㅌ 세부정보' 기능은 'ㅌ 정보' 명령어로 통합되었어요!")
+                        if commend[:7]=='닉네임 정보 ':
+                            createComment("특정 유저의 정보를 알고 싶나요? 'ㅌ 정보 {닉네임}' 명령어를 사용해보세요!")
+                        if commend[:10]=='닉네임으로 글찾기 ':
+                            createComment("특정 유저의 글을 찾고 싶나요? 'ㅌ 글찾기 {닉네임}' 명령어를 사용해보세요!")
+                        if commend[:11]=='닉네임으로 노팁찾기 ':
+                            createComment("특정 유저의 노팁을 찾고 싶나요? 'ㅌ 노팁찾기 {닉네임}' 명령어를 사용해보세요!")
+
                         # 추가 동작이 필요한 명령어
-                        if  commend in ['폭발', '폭8', '자폭']:
+                        elif  commend in ['폭발', '폭8', '자폭']:
                             createComment('폭8!!!!! 퍼퍼퍼버어어버ㅓㅍ어ㅓ어', '61de946f1e65f8fcf9015350')
 
                         elif commend[:3]=='유찾 ':
@@ -110,7 +120,7 @@ with requests.Session() as s:
                             createComment(rpl)
 
                         elif commend=='프사':
-                            profileImage=bot.profImgNick(bot.authorId)
+                            profileImage=bot.profileImage(bot.authorId)
                             createComment(f'{bot.authorNick}님의 프로필 사진이에요!', profileImage)
 
                         elif commend[:3]=='프사 ':

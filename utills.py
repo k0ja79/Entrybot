@@ -39,6 +39,7 @@ commendList={
     '뀨': '뀨? :3',
     '김치읓': '김치가 추가하라고 협박함 :<<<',
     'ㅈㅅㄱ': '안녕히가세요!',
+    '세부정보': "이전의 'ㅌ 세부정보' 기능은 'ㅌ 정보' 명령어로 통합되었어요!",
 }
 categoryList={'게임':'game', '생활과 도구':'living', '스토리텔링':'storytelling', '예술':'arts', '지식 공유':'knowledge', '기타':'etc'}
 user={'티엔': 'tnghks1'}
@@ -67,17 +68,13 @@ class Bot:
         self.authorId=story[story.index('"user":{"id":"')+14:story.index('"user":{"id":"')+14+24] # 작성자 id
         self.authorNick=story[story.index('","nickname":"')+14:story.index('","username":"')] # 작성자 닉네임
 
-    def profileImage(self):
-        profileImage=story[story.index('"profileImage":{"id":"')+22:story.index('"profileImage":{"id":"')+22+24]
-        return profileImage
-
     def bgImage(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
         myPage=req.text
         bgImage=myPage[myPage.index('"coverImage":{"id":"')+20:myPage.index('"coverImage":{"id":"')+20+24]
         return bgImage
 
-    def profImgNick(self, id):
+    def profileImage(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
         myPage=req.text
         profileImage=myPage[myPage.index('"profileImage":{"id":"')+22:myPage.index('"profileImage":{"id":"')+22+24]
