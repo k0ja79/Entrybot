@@ -111,7 +111,7 @@ with requests.Session() as s:
             elif commend in ['폭발', '폭8', '자폭']:
               createComment('폭8!!!!! 퍼퍼퍼버어어버ㅓㅍ어ㅓ어', '61de946f1e65f8fcf9015350')
             elif commend in ['안녕', '안녕!', '안녕?', '반가워']:
-              createComment('안녕하세요!')
+              createComment('안녕하세요!', '63e1eea87b794ac993acd114')
 
             elif commend[:3] == '유찾 ':
               rpl = ''
