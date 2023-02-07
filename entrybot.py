@@ -62,10 +62,10 @@ with requests.Session() as s:
   def openAdmin():
     f = open('admin.csv', 'r')
     reader = csv.reader(f)
-    f.close()
     output = []
     for i in reader:
       output.append(i)
+    f.close()
     return output[0]
 
   def plusAdmin():
@@ -110,6 +110,8 @@ with requests.Session() as s:
                 ]))
             elif commend in ['폭발', '폭8', '자폭']:
               createComment('폭8!!!!! 퍼퍼퍼버어어버ㅓㅍ어ㅓ어', '61de946f1e65f8fcf9015350')
+            elif commend in ['안녕', '안녕!', '안녕?', '반가워']:
+              createComment('안녕하세요!')
 
             elif commend[:3] == '유찾 ':
               rpl = ''
@@ -209,22 +211,25 @@ with requests.Session() as s:
 
             elif commend[:3] == '정보 ':
               myPage = bot.userSearchNick(commend[3:])
-              projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike, mostComment, mostView = bot.info(
-                myPage)
-              if status == "USE":
-                status = ''
-              elif status == "WARN":
-                status = '현재 1차 또는 2차정지 상태입니다.'
+              info=bot.info()
+              if info==None:
+                createComment(f'{commend[3:]} 닉네임을 가진 유저를 찾을 수 없어요.')
               else:
-                status = '영구정지 상태입니다.'
-              if projectCnt == 0:
-                createComment(
-                  f'{commend[3:]}님의 작품이 없어요. playentry.org/ws/new 에서 새 작품을 만들어 보세요! 커뮤니티 글 {qna+tip+free}개 중 묻고 답하기 {qna}개, 노하우&팁 {tip}개, 엔트리 이야기 {free}개입니다. {status}'
-                )
-              else:
-                createComment(
-                  f'{commend[3:]}님의 작품 {projectCnt}개의 총 좋아요 수는 {like}개, 댓글 수는 {comment}개, 조회수는 {view}회 입니다. 좋아요 가장 많은 작품 playentry.org/project/{mostLike}, 댓글 가장 많은 작품 playentry.org/project/{mostComment}, 조회수 가장 많은 작품 playentry.org/project/{mostView}. 인작 {popular}개, 스선 {staff}개. 커뮤니티 글 {qna+tip+free}개 중 묻고 답하기 {qna}개, 노하우&팁 {tip}개, 엔트리 이야기 {free}개입니다. {status}'
-                )
+                projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike, mostComment, mostView = info
+                if status == "USE":
+                  status = ''
+                elif status == "WARN":
+                  status = '현재 1차 또는 2차정지 상태입니다.'
+                else:
+                  status = '영구정지 상태입니다.'
+                if projectCnt == 0:
+                  createComment(
+                    f'{commend[3:]}님의 작품이 없어요. playentry.org/ws/new 에서 새 작품을 만들어 보세요! 커뮤니티 글 {qna+tip+free}개 중 묻고 답하기 {qna}개, 노하우&팁 {tip}개, 엔트리 이야기 {free}개입니다. {status}'
+                  )
+                else:
+                  createComment(
+                    f'{commend[3:]}님의 작품 {projectCnt}개의 총 좋아요 수는 {like}개, 댓글 수는 {comment}개, 조회수는 {view}회 입니다. 좋아요 가장 많은 작품 playentry.org/project/{mostLike}, 댓글 가장 많은 작품 playentry.org/project/{mostComment}, 조회수 가장 많은 작품 playentry.org/project/{mostView}. 인작 {popular}개, 스선 {staff}개. 커뮤니티 글 {qna+tip+free}개 중 묻고 답하기 {qna}개, 노하우&팁 {tip}개, 엔트리 이야기 {free}개입니다. {status}'
+                  )
 
             elif commend == '랜덤작':
               project, name, nick, des = bot.ranProject()
@@ -252,6 +257,13 @@ with requests.Session() as s:
               createComment('제작중...')
 
             # 관리 명령어
+            elif commend=='나 사랑해?':
+              adminList=openAdmin()
+              if bot.authorId in adminList:
+                createComment('저는 당연히 티엔님을 사랑해요!')
+              else:
+                createComment('아뇨, 전 한지민을 사랑해요^^')
+
             elif commend[:7] == '관리자 추가 ':
               adminList = openAdmin()
               if bot.authorId in adminList:
@@ -291,6 +303,8 @@ with requests.Session() as s:
               createComment('아직 지원하지 않는 명령어에요.')
         elif bot.text == 'ㅌ':
           createComment('부르셨나요?')
+        elif bot.text[0] in ['ㅌ', 't'] and bot.text!='ㅌㅈㅅㄱ':
+          createComment("절 부르려고 하셨나요? 'ㅌ'나 't' 뒤에 띄어쓰기를 해주세요!")
 
     # 에러 출력
     except:

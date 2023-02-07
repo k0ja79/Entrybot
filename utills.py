@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup as bs
 import graphql
 
 commendList={
-    '안녕': '안녕하세요!', '안녕!': '안녕하세요!', '안녕?': '안녕하세요!', '반가워': '안녕하세요!',
     '바보': '제 부족한 점을 알려주시면 개선하도록 노력할게요ㅠㅠ', '싫어': '제 부족한 점을 알려주시면 개선하도록 노력할게요ㅠㅠ',
     '샍': '와! 샌즈 아시네요!', '샌즈': '와! 샌즈 아시네요!', '샌주': '와! 샌즈 아시네요!',
     '개발자': '저의 개발자는 TN_티엔님( playentry.org/profile/5961bba619181b9033e53f8e )이에요!', '제작자': '저의 개발자는 TN_티엔님( playentry.org/profile/5961bba619181b9033e53f8e )이에요!',
@@ -27,7 +26,6 @@ commendList={
     '날짜': f'오늘 날짜는 {datetime.date.today()} 이에요!', '연도': f'오늘은 {datetime.date.today().year}년 이에요!', '몇월': f'오늘은 {datetime.date.today().month}월 이에요!', '몇일': f'오늘은 {datetime.date.today().day}일 이에요!', '시각': f'지금은 {datetime.datetime.now().hour}:{datetime.datetime.now().minute}:{datetime.datetime.now().second} 이에요!', '현재시각': f'지금은 {datetime.datetime.now().hour}:{datetime.datetime.now().minute}:{datetime.datetime.now().second} 이에요!', '몇시': f'지금은 {datetime.datetime.now().hour}시 에요!', '몇분': f'지금은 {datetime.datetime.now().minute}분 이에요!', '몇초': f'지금은 {datetime.datetime.now().second}.{datetime.datetime.now().microsecond}초 에요!',
     '그림 못그려': '하지만 전 코딩을 잘하니까 괜찮아요.',
     '댓글 달아줘': '달아줄까말까',
-    '나 사랑해?': '아뇨, 전 한지민을 사랑해요^^',
     '자동이야?': '네, 자동이에요.',
     '어딨어?': '당신의 마음속에요~',
     '수동이야?': '아니요, 자동이에요.',
@@ -37,7 +35,6 @@ commendList={
     '잘가': '다음에 또 봐요!',
     '응애': '응애 나 아기 티엔',
     '뀨': '뀨? :3',
-    '김치읓': '김치가 추가하라고 협박함 :<<<',
     'ㅈㅅㄱ': '안녕히가세요!',
     '세부정보': "이전의 'ㅌ 세부정보' 기능은 'ㅌ 정보' 명령어로 통합되었어요!",
 }
@@ -101,40 +98,43 @@ class Bot:
         mostLike, mostComment, mostView=[0, 0], [0, 0], [0, 0] # [좋아요 수, id]
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
         myPage=req.text
-        projectCnt=int(myPage[myPage.index(':{"project":')+12:myPage.index(',"projectAll":')])
-        status=myPage[myPage.index('"userStatus":"')+14:myPage.index(r'"}}},"ex')]
-        qna=int(myPage[myPage.index('"qna":')+6:myPage.index(',"tips":')])
-        tip=int(myPage[myPage.index(',"tips":')+8:myPage.index(',"free":')])
-        free=int(myPage[myPage.index(',"free":')+8:myPage.index('},"following":')])
-        req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
-        popular=len(re.findall(r'"ranked":".+?"', req.text))
-        staff=len(re.findall(r'"staffPicked":".+?"', req.text))
-        likeCnt=re.findall(r'"likeCnt":.+?,', req.text)
-        projectId=re.findall(r'[\[|},]{"id":".{24}?"', req.text)
-        num=0
-        for i in likeCnt:
-            like+=int(i[10:-1])
-            if int(i[10:-1])>=mostLike[0]:
-                mostLike[0]=int(i[10:-1])
-                mostLike[1]=projectId[num][8:-1]
-            num+=1
-        num=0
-        commentCnt=re.findall(r'"comment":.+?}', req.text)
-        for i in commentCnt:
-            comment+=int(i[10:-1])
-            if int(i[10:-1])>=mostComment[0]:
-                mostComment[0]=int(i[10:-1])
-                mostComment[1]=projectId[num][8:-1]
-            num+=1
-        num=0
-        viewCnt=re.findall(r'"visit":.+?,', req.text)
-        for i in viewCnt:
-            view+=int(i[8:-1])
-            if int(i[8:-1])>=mostView[0]:
-                mostView[0]=int(i[8:-1])
-                mostView[1]=projectId[num][8:-1]
-            num+=1
-        return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
+        try:
+            projectCnt=int(myPage[myPage.index(':{"project":')+12:myPage.index(',"projectAll":')])
+            status=myPage[myPage.index('"userStatus":"')+14:myPage.index(r'"}}},"ex')]
+            qna=int(myPage[myPage.index('"qna":')+6:myPage.index(',"tips":')])
+            tip=int(myPage[myPage.index(',"tips":')+8:myPage.index(',"free":')])
+            free=int(myPage[myPage.index(',"free":')+8:myPage.index('},"following":')])
+            req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
+            popular=len(re.findall(r'"ranked":".+?"', req.text))
+            staff=len(re.findall(r'"staffPicked":".+?"', req.text))
+            likeCnt=re.findall(r'"likeCnt":.+?,', req.text)
+            projectId=re.findall(r'[\[|},]{"id":".{24}?"', req.text)
+            num=0
+            for i in likeCnt:
+                like+=int(i[10:-1])
+                if int(i[10:-1])>=mostLike[0]:
+                    mostLike[0]=int(i[10:-1])
+                    mostLike[1]=projectId[num][8:-1]
+                num+=1
+            num=0
+            commentCnt=re.findall(r'"comment":.+?}', req.text)
+            for i in commentCnt:
+                comment+=int(i[10:-1])
+                if int(i[10:-1])>=mostComment[0]:
+                    mostComment[0]=int(i[10:-1])
+                    mostComment[1]=projectId[num][8:-1]
+                num+=1
+            num=0
+            viewCnt=re.findall(r'"visit":.+?,', req.text)
+            for i in viewCnt:
+                view+=int(i[8:-1])
+                if int(i[8:-1])>=mostView[0]:
+                    mostView[0]=int(i[8:-1])
+                    mostView[1]=projectId[num][8:-1]
+                num+=1
+            return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
+        except:
+            return None
     
     def ranProject(self, category=None):
         if category==None:
