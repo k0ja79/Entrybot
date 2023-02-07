@@ -302,7 +302,7 @@ with requests.Session() as s:
               createComment('아직 지원하지 않는 명령어에요.')
         elif bot.text == 'ㅌ':
           createComment('부르셨나요?')
-        elif bot.text[0] in ['ㅌ', 't'] and bot.text!='ㅌㅈㅅㄱ':
+        elif bot.text[0] == 'ㅌ' and bot.text!='ㅌㅈㅅㄱ':
           createComment("절 부르려고 하셨나요? 'ㅌ'나 't' 뒤에 띄어쓰기를 해주세요!")
 
     # 에러 출력
