@@ -17,7 +17,7 @@ with requests.Session() as s:
                json={
                  'query': graphql.createComment,
                  "variables": {
-                   "content": text,
+                   "content": f'{text} 티엔봇을 편리하게 사용하고 계신가요? 그렇다면 티엔봇을 계속 사용할 수 있게 이 제건에 동의해주세요. playentry.org/suggestion/63e215c2418a4a0037ec9d5d',
                    "target": bot.id,
                    "targetSubject": "discuss",
                    "targetType": "individual"
@@ -29,7 +29,7 @@ with requests.Session() as s:
                json={
                  'query': graphql.createComment,
                  "variables": {
-                   "content": text,
+                   "content": f'{text} 티엔봇을 편리하게 사용하고 계신가요? 그렇다면 티엔봇을 계속 사용할 수 있게 이 제건에 동의해주세요. playentry.org/suggestion/63e215c2418a4a0037ec9d5d',
                    "image": image,
                    "target": bot.id,
                    "targetSubject": "discuss",
