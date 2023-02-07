@@ -211,11 +211,10 @@ with requests.Session() as s:
 
             elif commend[:3] == '정보 ':
               myPage = bot.userSearchNick(commend[3:])
-              info=bot.info()
-              if info==None:
+              if myPage==None:
                 createComment(f'{commend[3:]} 닉네임을 가진 유저를 찾을 수 없어요.')
               else:
-                projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike, mostComment, mostView = info
+                projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike, mostComment, mostView = bot.info(myPage)
                 if status == "USE":
                   status = ''
                 elif status == "WARN":
