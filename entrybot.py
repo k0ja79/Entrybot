@@ -82,8 +82,8 @@ with requests.Session() as s:
       bot.setting()
       # if True: # 테스트용
       if pre_id != bot.id:
-        if bot.text[:2] in ['ㅌ ', 't ']:
-          commend = bot.text[2:]
+        if bot.text[:2] in ['ㅌ ', 't ', 'T '] or bot.text[:4] in ['ㅌㅇㅂ ', '티엔봇 ', 'tnb ', 'TNB ', 'TNb ']:
+          commend = bot.text[bot.text.index(' ')+1:]
           # commend='' # 테스트용
           # 일반 명령어
           try:
@@ -261,7 +261,8 @@ with requests.Session() as s:
               if bot.authorId in adminList:
                 createComment('저는 당연히 티엔님을 사랑해요!')
               else:
-                createComment('아뇨, 전 한지민을 사랑해요^^')
+                love=['한지민을', '또이를', '티엔님을', '개발자님을', '영자님을', '운영자님을', '엔프님을', '엔트리를', '엔트리봇을', 'hjm13_을', '히짐을', 'ddoeey123을', 'ZerO를', 'entryfriends님을']
+                createComment(f'아뇨, 전 {random.choice(love)} 사랑해요^^')
 
             elif commend[:7] == '관리자 추가 ':
               adminList = openAdmin()
@@ -299,11 +300,11 @@ with requests.Session() as s:
 
             # 명령어 끝
             else:
-              createComment('아직 지원하지 않는 명령어에요.')
+              createComment('아직 지원하지 않는 명령어에요. 명령어 관련 제안이 있다면 이 작품에 알려주세요! naver.me/5UGa0Vxs')
         elif bot.text == 'ㅌ':
-          createComment('부르셨나요?')
-        elif bot.text[0] == 'ㅌ' and bot.text!='ㅌㅈㅅㄱ':
-          createComment("절 부르려고 하셨나요? 'ㅌ'나 't' 뒤에 띄어쓰기를 해주세요!")
+          createComment('부르셨나요?', '63e1eea87b794ac993acd114')
+      elif bot.text[0] == 'ㅌ' and bot.text[:4]!='ㅌㅈㅅㄱ' and bot.text[:3]!='ㅌㅣ프':
+          createComment("절 부르려고 하셨나요? 'ㅌ' 뒤에 띄어쓰기를 해주세요!", '63e1eea87b794ac993acd114')
 
     # 에러 출력
     except:
