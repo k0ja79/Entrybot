@@ -303,7 +303,7 @@ with requests.Session() as s:
               createComment('아직 지원하지 않는 명령어에요. 명령어 관련 제안이 있다면 이 작품에 알려주세요! naver.me/5UGa0Vxs')
         elif bot.text == 'ㅌ':
           createComment('부르셨나요?', '63e1eea87b794ac993acd114')
-      elif bot.text[0] == 'ㅌ' and bot.text[:4]!='ㅌㅈㅅㄱ' and bot.text[:3]!='ㅌㅣ프':
+        elif bot.text[0] == 'ㅌ' and bot.text[:4]!='ㅌㅈㅅㄱ' and bot.text[:3]!='ㅌㅣ프':
           createComment("절 부르려고 하셨나요? 'ㅌ' 뒤에 띄어쓰기를 해주세요!", '63e1eea87b794ac993acd114')
 
     # 에러 출력
