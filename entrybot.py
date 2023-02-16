@@ -261,7 +261,7 @@ with requests.Session() as s:
                 if status == "USE": status = '정지 상태가 아닙니다.'
                 elif status == "WARN": status = '현재 1차 또는 2차정지 상태입니다.'
                 else: status = '영구정지 상태입니다.'
-                createComment(f'{commend[3:]}님은 {status}')
+                createComment(f'{commend[5:]}님은 {status}')
 
             elif commend[:4] == '커뮤니티수 ':
               myPage = bot.userSearchNick(commend[6:])
