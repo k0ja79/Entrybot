@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 # 추가
-*.pptx
-admin.csv
+/gitignore
