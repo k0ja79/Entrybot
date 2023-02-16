@@ -284,7 +284,7 @@ with requests.Session() as s:
 
             # 관리 명령어
             elif commend=='나 사랑해?':
-              adminList=openAdmin()[0]
+              adminList=openAdmin()
               if bot.authorId in adminList:
                 createComment('저는 당연히 티엔님을 사랑해요!')
               else:
@@ -292,7 +292,7 @@ with requests.Session() as s:
                 createComment(f'아뇨, 전 {random.choice(love)} 사랑해요^^')
 
             elif commend[:7] == '관리자 추가 ':
-              adminList = openAdmin()[0]
+              adminList = openAdmin()
               if bot.authorId in adminList:
                 if commend[7:] in adminList:
                   createComment('이미 관리자 목록에 추가되어 있어요.')
@@ -304,7 +304,7 @@ with requests.Session() as s:
                 createComment('관리자만 사용할 수 있는 명령어입니다.')
 
             elif commend == '시작':
-              adminList = openAdmin()[0]
+              adminList = openAdmin()
               if bot.authorId in adminList:
                 if active == True:
                   createComment('이미 작동하고 있습니다.')
@@ -316,7 +316,7 @@ with requests.Session() as s:
                 createComment('관리자만 사용할 수 있는 명령어입니다.')
 
             elif commend == '중지':
-              adminList = openAdmin()[0]
+              adminList = openAdmin()
               if bot.authorId in adminList:
                 if active == True:
                   createComment('티엔봇 작동을 중지합니다.')
