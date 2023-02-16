@@ -46,7 +46,7 @@ with requests.Session() as s:
             })
 
   def openAdmin():
-    f = open('admin.csv', 'r')
+    f = open('gitignore/admin.csv', 'r')
     reader = csv.reader(f)
     output = []
     for i in reader:
@@ -55,7 +55,7 @@ with requests.Session() as s:
     return output[0]
 
   def plusAdmin():
-    f = open('admin.csv', 'w')
+    f = open('gitignore/admin.csv', 'w')
     a = csv.writer(f, delimiter=',')
     a.writerows([adminList])
     f.close()
