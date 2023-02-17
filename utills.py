@@ -100,15 +100,15 @@ class Bot:
         myPage=json.loads(req.text)
         projectCnt=myPage['data']['userstatus']['status']['project']
         status=myPage['data']['userstatus']['status']['userStatus']
-        qna=myPage['data']['userstatus']['status']['community']['qua']
-        tip=myPage['data']['userstatus']['status']['community']['tip']
+        qna=myPage['data']['userstatus']['status']['community']['qna']
+        tip=myPage['data']['userstatus']['status']['community']['tips']
         free=myPage['data']['userstatus']['status']['community']['free']
         
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
         myPage=json.loads(req.text)
         project=myPage['data']['userProjectList']['list']
         popular, staff=0, 0
-        likeCnt, commentCnt, viewCnt, projectId=[], []
+        likeCnt, commentCnt, viewCnt, projectId=[], [], [], []
         for i in project:
             if i['ranked']!=None:
                 popular+=1
@@ -135,43 +135,6 @@ class Bot:
             if i>=mostView[0]: mostView=[i, projectId[num]]
             num+=1
         return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
-        # try:
-        #     projectCnt=int(myPage[myPage.index(':{"project":')+12:myPage.index(',"projectAll":')])
-        #     status=myPage[myPage.index('"userStatus":"')+14:myPage.index(r'"}}},"ex')]
-        #     qna=int(myPage[myPage.index('"qna":')+6:myPage.index(',"tips":')])
-        #     tip=int(myPage[myPage.index(',"tips":')+8:myPage.index(',"free":')])
-        #     free=int(myPage[myPage.index(',"free":')+8:myPage.index('},"following":')])
-        #     req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
-        #     popular=len(re.findall(r'"ranked":".+?"', req.text))
-        #     staff=len(re.findall(r'"staffPicked":".+?"', req.text))
-        #     likeCnt=re.findall(r'"likeCnt":.+?,', req.text)
-        #     projectId=re.findall(r'[\[|},]{"id":".{24}?"', req.text)
-        #     num=0
-        #     for i in likeCnt:
-        #         like+=int(i[10:-1])
-        #         if int(i[10:-1])>=mostLike[0]:
-        #             mostLike[0]=int(i[10:-1])
-        #             mostLike[1]=projectId[num][8:-1]
-        #         num+=1
-        #     num=0
-        #     commentCnt=re.findall(r'"comment":.+?}', req.text)
-        #     for i in commentCnt:
-        #         comment+=int(i[10:-1])
-        #         if int(i[10:-1])>=mostComment[0]:
-        #             mostComment[0]=int(i[10:-1])
-        #             mostComment[1]=projectId[num][8:-1]
-        #         num+=1
-        #     num=0
-        #     viewCnt=re.findall(r'"visit":.+?,', req.text)
-        #     for i in viewCnt:
-        #         view+=int(i[8:-1])
-        #         if int(i[8:-1])>=mostView[0]:
-        #             mostView[0]=int(i[8:-1])
-        #             mostView[1]=projectId[num][8:-1]
-        #         num+=1
-        #     return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
-        # except:
-        #     return None
     
     def ranProject(self, category=None):
         if category==None:

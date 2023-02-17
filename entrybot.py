@@ -12,16 +12,7 @@ with requests.Session() as s:
     global pre_id
     if active == True:
       if image == None:
-        s.post('https://playentry.org/graphql', headers=bot.headers,
-               json={
-                 'query': graphql.createComment,
-                 "variables": {
-                   "content": text,
-                   "target": bot.id,
-                   "targetSubject": "discuss",
-                   "targetType": "individual"
-                 }
-               })
+        s.post('https://playentry.org/graphql', headers=bot.headers, json={'query': graphql.createComment, "variables": {"content": text, "target": bot.id, "targetSubject": "discuss", "targetType": "individual"}})
       else:
         s.post('https://playentry.org/graphql', headers=bot.headers,
                json={
