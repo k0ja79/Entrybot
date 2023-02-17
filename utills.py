@@ -98,45 +98,43 @@ class Bot:
         mostLike, mostComment, mostView=[0, 0], [0, 0], [0, 0] # [좋아요 수, id]
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
         myPage=json.loads(req.text)
-        try:
-            projectCnt=myPage['data']['userstatus']['status']['project']
-            status=myPage['data']['userstatus']['status']['userStatus']
-            qna=myPage['data']['userstatus']['status']['community']['qua']
-            tip=myPage['data']['userstatus']['status']['community']['tip']
-            free=myPage['data']['userstatus']['status']['community']['free']
-            
-            req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
-            myPage=json.loads(req.text)
-            project=myPage['data']['userProjectList']['list']
-            popular, staff=0, 0
-            likeCnt, commentCnt, viewCnt, projectId=[], []
-            for i in project:
-                if i['ranked']!=None:
-                    popular+=1
-                if i['staffPicked']!=None:
-                    staff+=1
-                likeCnt.append(i['likeCnt'])
-                commentCnt.append(i['comment'])
-                viewCnt.append(i['visit'])
-                projectId.append(i['id'])
+        projectCnt=myPage['data']['userstatus']['status']['project']
+        status=myPage['data']['userstatus']['status']['userStatus']
+        qna=myPage['data']['userstatus']['status']['community']['qua']
+        tip=myPage['data']['userstatus']['status']['community']['tip']
+        free=myPage['data']['userstatus']['status']['community']['free']
+        
+        req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadProject, "variables":{"searchType":"scroll","user":id,"term":"all","pageParam":{"display":projectCnt,"sort":"created"}}})
+        myPage=json.loads(req.text)
+        project=myPage['data']['userProjectList']['list']
+        popular, staff=0, 0
+        likeCnt, commentCnt, viewCnt, projectId=[], []
+        for i in project:
+            if i['ranked']!=None:
+                popular+=1
+            if i['staffPicked']!=None:
+                staff+=1
+            likeCnt.append(i['likeCnt'])
+            commentCnt.append(i['comment'])
+            viewCnt.append(i['visit'])
+            projectId.append(i['id'])
 
-            num=0
-            for i in likeCnt:
-                like+=i
-                if i>=mostLike[0]: mostLike=[i, projectId[num]]
-                num+=1
-            num=0
-            for i in commentCnt:
-                comment+=i
-                if i>=mostComment[0]: mostComment=[i, projectId[num]]
-                num+=1
-            num=0
-            for i in viewCnt:
-                view+=i
-                if i>=mostView[0]: mostView=[i, projectId[num]]
-                num+=1
-            return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
-        except: return None
+        num=0
+        for i in likeCnt:
+            like+=i
+            if i>=mostLike[0]: mostLike=[i, projectId[num]]
+            num+=1
+        num=0
+        for i in commentCnt:
+            comment+=i
+            if i>=mostComment[0]: mostComment=[i, projectId[num]]
+            num+=1
+        num=0
+        for i in viewCnt:
+            view+=i
+            if i>=mostView[0]: mostView=[i, projectId[num]]
+            num+=1
+        return projectCnt, like, comment, view, status, qna, tip, free, popular, staff, mostLike[1], mostComment[1], mostView[1]
         # try:
         #     projectCnt=int(myPage[myPage.index(':{"project":')+12:myPage.index(',"projectAll":')])
         #     status=myPage[myPage.index('"userStatus":"')+14:myPage.index(r'"}}},"ex')]
