@@ -52,16 +52,15 @@ with requests.Session() as s:
     f.close()
 
   keep_alive()
+  print('티엔봇 작동 시작')
 
   while True:
     try:
       time.sleep(0.1)
       bot.setting()
-      # if True: # 테스트용
-      if pre_id != bot.id:
+      if pre_id != bot.id and len(bot.text)!=0:
         if bot.text[:2] in ['ㅌ ', 't ', 'T '] or bot.text[:4] in ['ㅌㅇㅂ ', '티엔봇 ', 'tnb ', 'TNB ', 'TNb ']:
           commend = bot.text[bot.text.index(' ')+1:]
-          # commend='' # 테스트용
           # 일반 명령어
           try:
             createComment(utills.commendList[commend])
@@ -257,7 +256,7 @@ with requests.Session() as s:
                 else: status = '영구정지 상태입니다.'
                 createComment(f'{commend[5:]}님은 {status}')
 
-            elif commend[:4] == '커뮤니티수 ':
+            elif commend[:6] == '커뮤니티수 ':
               myPage = bot.userSearchNick(commend[6:])
               if myPage==None:
                 createComment(f'{commend[6:]} 닉네임을 가진 유저를 찾을 수 없어요.')
