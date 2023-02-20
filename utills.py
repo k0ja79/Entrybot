@@ -58,19 +58,14 @@ class Bot:
 
     def setting(self):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadStory, "variables":{"category":"free","searchType":"scroll","term":"all","discussType":"entrystory","pageParam":{"display":1,"sort":"created"}}})
-        # story=req.text # 엔이 글 요청 응답
         story=json.loads(req.text)
         self.text=story['data']['discussList']['list'][0]['content']
-        # self.text=story[92:story.index('","created":')] # 최신글
         try:
             self.text=self.text[:self.text.index('&::')]
         except: pass
         self.id=story['data']['discussList']['list'][0]['id']
         self.authorId=story['data']['discussList']['list'][0]['user']['id']
         self.authorNick=story['data']['discussList']['list'][0]['user']['nickname']
-        # self.id=story[55:story.index('","content":"')] # 글 id
-        # self.authorId=story[story.index('"user":{"id":"')+14:story.index('"user":{"id":"')+14+24] # 작성자 id
-        # self.authorNick=story[story.index('","nickname":"')+14:story.index('","username":"')] # 작성자 닉네임
 
     def bgImage(self, id):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadMypage, "variables":{"id":id}})
