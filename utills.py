@@ -59,7 +59,7 @@ class Bot:
     def setting(self):
         req=self.session.post('https://playentry.org/graphql', headers=self.headers, json={'query':graphql.loadStory, "variables":{"category":"free","searchType":"scroll","term":"all","discussType":"entrystory","pageParam":{"display":1,"sort":"created"}}})
         # story=req.text # 엔이 글 요청 응답
-        story=json.text(req.text)
+        story=json.loads(req.text)
         self.text=story['data']['discussList']['list'][0]['content']
         # self.text=story[92:story.index('","created":')] # 최신글
         try:
